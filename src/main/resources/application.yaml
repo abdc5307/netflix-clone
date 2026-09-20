@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/netflix?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: netflix
-    password: "Wjddms0621@"
+    username: root
+    password: Wjddms0621@
 
   jpa:
     hibernate:
@@ -17,5 +17,5 @@ spring:
         format_sql: true
 
 jwt:
-  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  secret: your256bitsecretkeyhere1234567890abcdefghijklmnopqrstuvwxyz
   expiration: 86400000
