@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Swagger UI 관련 경로 허용
+                        // 1. Swagger UI 및 기본 에러 경로 허용
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
@@ -40,18 +40,25 @@ public class SecurityConfig {
                                 "/error"
                         ).permitAll()
 
-                        // 2. 인증(회원가입, 로그인) 허용
+                        // 2. 정적 이미지 파일 조회 허용 (누구나 이미지 URL로 접근 가능)
+                        .requestMatchers("/images/**").permitAll()
+
+                        // 3. 인증(회원가입, 로그인) 허용
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // 3. 콘텐츠 조회(GET)는 누구나 가능
+                        // 4. 콘텐츠 조회(GET)는 누구나 가능
                         .requestMatchers(HttpMethod.GET, "/api/contents/**").permitAll()
 
-                        // 4. 콘텐츠 등록/수정/삭제는 ADMIN 권한만 가능
+                        // 5. 콘텐츠 등록/수정/삭제는 ADMIN 권한만 가능
                         .requestMatchers(HttpMethod.POST, "/api/contents/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/contents/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/contents/**").hasAuthority("ROLE_ADMIN")
 
-                        // 그 외 요청은 인증 필요
+                        // 6. 이미지 업로드 및 마이리스트(찜)는 로그인된 사용자만 가능
+                        .requestMatchers("/api/images/**").authenticated()
+                        .requestMatchers("/api/wishlists/**").authenticated()
+
+                        // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
